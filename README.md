@@ -1,62 +1,86 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+CI/CD for PHP Projects with AWS
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Recently I learned how to create a Continuous Integration and Continuous Deployment [CI/CD] pipeline for any PHP based projects with all AWS services. This is what I am going to share with you all today.
 
-## About Laravel
+AWS has multiple ways to create CI/CD for PHP based projects. Among them I am going to showcase 2 of them, one easy and one difficult!
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Context:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+PHP framework: Laravel [Latest Version]
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+AWS Service: CodeStar, CodePipeline, CodeCommit, ElasticBeanStalk, EC2, Auto Scaling Group, S3, RDS etc.
 
-## Learning Laravel
+Other Service: Github
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+👉 Customized method: CodeCommit + Elastic BeanStalk + CodePipeline.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+This is a custom made CI/CD for PHP based frameworks like Laravel. The key service is ElasticBeanStalk here. AWS Service configuration needs to be done in the same step after step mentioned. Like;
 
-## Laravel Sponsors
+Please have a look on the solutions Architecture for the CI/CD pipeline:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+![aws01](https://user-images.githubusercontent.com/47071968/178912771-7bd0fdc6-744f-43a6-a9f0-d5b1a989cd45.png)
 
-### Premium Partners
+=> First Create and configure CodeCommit or any other version control system like Github. I will use Github repo in this case:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
+![aws0202](https://user-images.githubusercontent.com/47071968/178913257-cc32bd72-61e8-445e-bd55-d908fa2b3a92.PNG)
 
-## Contributing
+=> Secondly configure Elastic BeanStalk with the desired environment settings and define PHP as the programming language.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+![aws03](https://user-images.githubusercontent.com/47071968/178913553-7c0afbe5-1eb7-4a5b-8c01-bba06e531422.png)
 
-## Code of Conduct
+Get the Elastic Beanstalk project but with an error on project status:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+![aws04](https://user-images.githubusercontent.com/47071968/178913807-e9fbdde0-60d9-489d-8a75-e69a3b9df241.png)
 
-## Security Vulnerabilities
+Add these 2 IAM permissions to the role mentioned on the warning:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+![aws05](https://user-images.githubusercontent.com/47071968/178914352-90e9e710-1e52-499c-b8dd-4173cf827a41.png)
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This Warning will go away with an OK status! 😎
+=> Now it's time to create the pipeline with the help of AWS CodePipeline service.
+
+![aws06](https://user-images.githubusercontent.com/47071968/178914530-dbd9f4e5-6a87-4bee-ad3e-7b7ebefca0aa.png)
+
+Next step add code source, here I am adding Github source. So for Github repo connection you will have to create a connection and install an AWS application in Github side and get the connection.
+Select the correct repo and branch, leave everything else default.
+
+![aws07](https://user-images.githubusercontent.com/47071968/178914780-75891bd2-5342-4461-af6d-96977ee93896.png)
+
+Skip next build step as Elastic BeanStalk will take care of it.
+
+![aws08](https://user-images.githubusercontent.com/47071968/178915212-e748a868-12a5-4490-8d50-8335b2b2fd6f.png)
+![aws09](https://user-images.githubusercontent.com/47071968/178915321-73da9923-3a3a-4e51-8392-032fea7567c5.png)
+
+Click next and complete the pipeline configuration details. It will take some time to complete the deployment pipeline.
+
+![aws10](https://user-images.githubusercontent.com/47071968/178915595-2b0927d0-4198-4d1d-8d82-24d753376878.png)
+
+Here you go with the fully automated CI/CD pipeline using github + Elastic Beanstalk + CodePipeline for any PHP frameworks like Laravel.
+Let me tell you another easiest method to create this same pipelien without doing configuration for Elastic Beanstalk or creating any repo. Sounds cool right!
+👉 Easiest method: AWS CodeStar 
+With AWS CodeStar, you can create Laravel CI/CD pipeline in 3 min! I am not kidding at all. With a few clicks AWS CodeStar allows you to create an fully automated CI/CD using their predefined Cloudformation template.
+
+
+CodeStar not only helps you create a robust CI/CD pipeline but also it has other awesome features like integrating IDEs, add team members, monitoring deployment error logs, track issues and many more. Out of the box features to have fully managed EC2 instances with preconfigured Auto Scaling Group to handle traffic and scale horizontally as per need.
+Specially I love this feature of AWS to handle such a heavy lifting and save a lot of time for the server support and developers to focus more on coding. let's see things in action...
+
+CodeStar Solutions Architecture:
+![aws11](https://user-images.githubusercontent.com/47071968/178915926-db305443-9070-46e3-9a76-bd1f0d554b96.png)
+
+AWS CodeStar supports more then 30 frameworks from almost all the common and most used programming languages.
+![aws12](https://user-images.githubusercontent.com/47071968/178916086-97132bca-efe3-4799-b2b5-f9595b5e5d15.png)
+
+From there choose your desired programming language and then choose framework template to go for next step to define server side configurations.
+![aws13](https://user-images.githubusercontent.com/47071968/178916514-dbc4215e-608f-4f6b-b429-959a33046e69.png)
+
+Nest step is to define code source for the CodeStar project as either CodeCommit or Github along with EC2 instance type, VPC, Subnet and EC2 Key Pair for the instance to configure.
+
+![aws14](https://user-images.githubusercontent.com/47071968/178916680-ac79b4df-619a-46d0-8ac9-08aea22f1454.png)
+
+Click Next and review all the configurations set up and complete creating your AWS CodeStar CI/CD pipeline for PHP Laravel project. It will take some time to complete the configuration. And after completion you will find your project listed like this and you can see your Repository, Pipeline and other features listed in one place.
+
+![aws15](https://user-images.githubusercontent.com/47071968/178916892-3e2ebfd0-d5f7-4c58-bb0c-232494248c7b.png)
+![aws16](https://user-images.githubusercontent.com/47071968/178917016-98e6906e-945f-471a-9391-cd8d2d66cd07.jpg)
+
+Hope you find it useful and learned something new out of it. Please let me know if you have any other Solutions architecture for creating CI/CD with all AWS Services.
