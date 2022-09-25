@@ -1,4 +1,4 @@
-CI/CD for PHP Projects with AWS
+# CI/CD for PHP Projects with AWS
 
 Recently I learned how to create a Continuous Integration and Continuous Deployment [CI/CD] pipeline for any PHP based projects with all AWS services. This is what I am going to share with you all today.
 
