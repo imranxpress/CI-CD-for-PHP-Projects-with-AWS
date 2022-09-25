@@ -6,13 +6,13 @@ AWS has multiple ways to create CI/CD for PHP based projects. Among them I am go
 
 Context:
 
-PHP framework: Laravel [Latest Version]
+## PHP framework: Laravel [Latest Version]
 
-AWS Service: CodeStar, CodePipeline, CodeCommit, ElasticBeanStalk, EC2, Auto Scaling Group, S3, RDS etc.
+## AWS Service: CodeStar, CodePipeline, CodeCommit, ElasticBeanStalk, EC2, Auto Scaling Group, S3, RDS etc.
 
-Other Service: Github
+## Other Service: Github
 
-👉 Customized method: CodeCommit + Elastic BeanStalk + CodePipeline.
+## 👉 Customized method: CodeCommit + Elastic BeanStalk + CodePipeline.
 
 This is a custom made CI/CD for PHP based frameworks like Laravel. The key service is ElasticBeanStalk here. AWS Service configuration needs to be done in the same step after step mentioned. Like;
 
